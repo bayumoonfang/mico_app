@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
         showToast("Data anda tidak ditemukan", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
         return;
       } else{
-        Navigator.pushReplacement(context, ExitPage(page: VerifikasiLogin(_phonecontrol.text.toString(),
+        Navigator.push(context, ExitPage(page: VerifikasiLogin(_phonecontrol.text.toString(),
             _emailcontroller.text.toString())));
         return;
       }
@@ -103,7 +103,7 @@ class _LoginState extends State<Login> {
                             fontFamily: 'VarelaRound',fontSize: 14))),
 
                 Padding(
-                    padding: const EdgeInsets.only(top: 10.0)),
+                    padding: const EdgeInsets.only(top: 20.0)),
 
                 TextFormField(
                   style: TextStyle(
@@ -116,9 +116,25 @@ class _LoginState extends State<Login> {
                   controller: _phonecontrol,
                   maxLength: 13,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: "Phone Number",
-                  ),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        prefixIcon: Icon(Icons.phone,color: Colors.black,),
+                        hintText: "Nomor Handphone anda",
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: BorderSide(
+                          color: HexColor("#602d98"),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: BorderSide(
+                          color: HexColor("#dbd0ea"),
+                          width: 1.0,
+                        ),
+                      ),
+
+                    ),
                 ),
                 TextFormField(
                   style: TextStyle(
@@ -132,7 +148,23 @@ class _LoginState extends State<Login> {
                   controller: _emailcontroller,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    labelText: "Email",
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    prefixIcon: Icon(Icons.mail,color: Colors.black,),
+                    hintText: "Email anda",
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: BorderSide(
+                        color: HexColor("#602d98"),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: BorderSide(
+                        color: HexColor("#dbd0ea"),
+                        width: 1.0,
+                      ),
+                    ),
+
                   ),
                 )
 
@@ -155,15 +187,15 @@ class _LoginState extends State<Login> {
                                 child :
                             RaisedButton(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
+                                  borderRadius: BorderRadius.circular(50.0),
                                 ),
-                                //color: HexColor("#8cc63e"),
+                                color: HexColor("#602d98"),
                                 child: Text(
                                   "Selanjutnya",
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontSize: 14.5,
-                                      color: Colors.black
+                                      color: Colors.white
                                   ),
                                 ),
                                 onPressed: () {

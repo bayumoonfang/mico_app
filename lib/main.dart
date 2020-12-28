@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mico_app/mico_index.dart';
+import 'package:mico_app/page_home.dart';
 
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Index(),
+      home: Home(),
       //home : Login()
     );
   }

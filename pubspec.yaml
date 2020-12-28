@@ -47,6 +47,7 @@ dependencies:
   date_format: ^1.0.6
   intl: ^0.16.1
   responsive_container: ^0.0.1
+  flutter_svg: ^0.19.2+1
 
 
 dev_dependencies:
