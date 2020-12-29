@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/mico_login.dart';
-import 'package:mico_app/page_home.dart';
+import 'package:mico_app/mico_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mico_app/mico_index.dart';
-import 'package:mico_app/page_home.dart';
+import 'package:mico_app/mico_home.dart';
 
 
 void main() {
