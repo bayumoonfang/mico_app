@@ -1,7 +1,4 @@
 
-
-import 'dart:convert';
-
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,9 +9,12 @@ import 'package:intl/intl.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
 import 'package:mico_app/mico_index.dart';
+import 'package:mico_app/services/mico_cekroomchat.dart';
+import 'package:mico_app/services/mico_cekroomvideo.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:async';
+import 'dart:convert';
 
 class DoktorList extends StatefulWidget {
   @override
@@ -23,8 +23,11 @@ class DoktorList extends StatefulWidget {
 
 
 
-class _DoktorListState extends State<DoktorList> {
+class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMixin<DoktorList> {
   List data, data2;
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
@@ -36,7 +39,7 @@ class _DoktorListState extends State<DoktorList> {
     getEmail = await Session.getEmail();
     getPhone = await Session.getPhone();
     if (value != 1) {
-      Navigator.push(context, ExitPage(page: Index()));
+      Navigator.pushReplacement(context, ExitPage(page: Index()));
     }
   }
 
@@ -51,6 +54,16 @@ class _DoktorListState extends State<DoktorList> {
     });
   }
 
+  String cekApp = "";
+  _getCountApp() async {
+    final response = await http.get(
+        "https://mobile.miracle-clinic.com/api_script.php?do=getdata_cekapp&id="+getPhone.toString());
+    Map data = jsonDecode(response.body);
+    setState(() {
+        cekApp = data["a"].toString();
+    });
+  }
+
 
   Future<List> getDataRecent() async {
     http.Response response = await http.get(
@@ -62,7 +75,14 @@ class _DoktorListState extends State<DoktorList> {
     });
   }
 
-
+ Future getData2() async {
+    data.clear();
+    data2.clear();
+    await Future.delayed(Duration(seconds: 2));
+    getData();
+    getDataRecent();
+    _getCountApp();
+ }
 
 
   void _addfavorite(String iddokter) {
@@ -89,29 +109,74 @@ class _DoktorListState extends State<DoktorList> {
 
 
 
+  void _loadData() async {
+    await _session();
+    await _getCountApp();
+  }
+
   @override
   void initState() {
     super.initState();
-    _session();
+
+    _loadData();
     //getData();
   }
 
 
   @override
   Widget build(BuildContext context) {
-        return WillPopScope(
+        return
+          RefreshIndicator(
+            onRefresh: getData2,
+          child :
+          WillPopScope(
           child: new Scaffold(
-            body:  Column(
+            body:  Stack(
               children: [
+                Column(
+                  children: [
+                    _datarecent(),
+                    Expanded(
+                      child: _datafield(),
+                    ),
+                  ],
+                ),
+                cekApp != '' ?
+                Positioned(child:
+                Badge(
+                  child: FloatingActionButton(
+                    backgroundColor: HexColor("#dbd0ea"),
+                    foregroundColor: Colors.black,
+                    child: FaIcon(
+                      cekApp == "VIDEO" ?
+                      FontAwesomeIcons.video
+                          :
+                      FontAwesomeIcons.comment,
+                      size: 21,
+                    ),
+                    onPressed: () {
+                      cekApp == "VIDEO" ?
+                      Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) => CekRoomVideo()))
+                          :
+                      Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) => CekRoomChat()));
+                    },
+                  ),
+                  position: BadgePosition.topEnd(top: 0,end: 1),
+                  badgeContent: Text("1", style: TextStyle(color: Colors.white,fontFamily: 'VarelaRound'),),
+                ),
+                  bottom: 20,right: 20,)
+                    :
+                Container()
 
-                _datarecent(),
-                Expanded(
-                  child: _datafield(),
-                )
+
               ],
             )
           ),
-        );
+        ));
   }
 
   Widget _datarecent() {
@@ -164,7 +229,7 @@ class _DoktorListState extends State<DoktorList> {
                           width: 75,
                           padding: const EdgeInsets.only(top: 5, left: 5),
                           child: Text(
-                            data2[i]["b"], style: TextStyle(color: Colors.black,
+                           data2[i]["b"], style: TextStyle(color: Colors.black,
                             fontSize: 12,
                             fontFamily: 'VarelaRound',),
                             overflow: TextOverflow.ellipsis,
@@ -198,26 +263,7 @@ class _DoktorListState extends State<DoktorList> {
               )
           );
         } else {
-          return data.isEmpty ?
-            Center(
-                child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    new Text(
-                      "Dokter tidak ditemukan",
-                      style: new TextStyle(
-                          fontFamily: 'VarelaRound', fontSize: 20),
-                    ),
-                    new Text(
-                      "Silahkan coba beberapa saat lagi..",
-                      style: new TextStyle(
-                          fontFamily: 'VarelaRound', fontSize: 16),
-                    ),
-                  ],
-                ))
-              :
-                ListView.builder(
+              return  ListView.builder(
                 padding: const EdgeInsets.only(top: 5,bottom: 80),
                 itemCount: data == null ? 0 : data.length,
                 itemBuilder: (context, i) {

@@ -42,7 +42,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       showToast("Token harus 6 angka", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
-    final response = await http.post("https://duakata-dev.com/miracle/api_script.php?do=act_ceklogin",
+    final response = await http.post("https://mobile.miracle-clinic.com/api_script.php?do=act_ceklogin",
         body: {"phone": getPhone, "email": getEmail, "token": _tokenVal.text});
     Map data = jsonDecode(response.body);
     setState(() {

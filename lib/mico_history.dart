@@ -1,29 +1,31 @@
 
 
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
 import 'package:mico_app/mico_index.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'dart:async';
+import 'dart:convert';
 
 
 
-class Appointment extends StatefulWidget{
+class History extends StatefulWidget {
   @override
-  _AppointmentState createState() => _AppointmentState();
+  _HistoryState createState() => new _HistoryState();
 }
 
 
-class _AppointmentState extends State<Appointment> with SingleTickerProviderStateMixin {
+class _HistoryState extends State<History> with AutomaticKeepAliveClientMixin<History> {
   @override
-
+  bool get wantKeepAlive => true;
   List data;
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
@@ -43,7 +45,7 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
 
   Future<List> getData() async {
     http.Response response = await http.get(
-        Uri.encodeFull("https://mobile.miracle-clinic.com/api_script.php?do=getdata_recentdokter2&id="+getPhone.toString()),
+        Uri.encodeFull("https://mobile.miracle-clinic.com/api_script.php?do=getdata_recentdokter3&id="+getPhone.toString()),
         headers: {"Accept":"application/json"}
     );
     setState((){
@@ -69,19 +71,19 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return
       RefreshIndicator(
-        onRefresh: getData2,
-    child :
-      WillPopScope(
-      child: new Scaffold(
-          body:  Column(
-            children: [
-              Expanded(
-                child: _datafield(),
-              )
-            ],
-          )
-      ),
-    ));
+          onRefresh: getData2,
+          child :
+          WillPopScope(
+            child: new Scaffold(
+                body:  Column(
+                  children: [
+                    Expanded(
+                      child: _datafield(),
+                    )
+                  ],
+                )
+            ),
+          ));
 
   }
 
@@ -98,29 +100,29 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
               )
           );
         } else {
-              return data.isEmpty ?
-                Container()
+          return data.isEmpty ?
+          Container()
               : data == null ?
-              Center(
-                  child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new Text(
-                        "Tidak Ada Appointment",
-                        style: new TextStyle(
-                            fontFamily: 'VarelaRound', fontSize: 20),
-                      ),
-                      new Text(
-                        "Silahkan melakukan appointment..",
-                        style: new TextStyle(
-                            fontFamily: 'VarelaRound', fontSize: 16),
-                      ),
-                    ],
-                  ))
-          :
+          Center(
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  new Text(
+                    "Tidak Ada Appointment",
+                    style: new TextStyle(
+                        fontFamily: 'VarelaRound', fontSize: 20),
+                  ),
+                  new Text(
+                    "Silahkan melakukan appointment..",
+                    style: new TextStyle(
+                        fontFamily: 'VarelaRound', fontSize: 16),
+                  ),
+                ],
+              ))
+              :
           ListView.builder(
-            padding: const EdgeInsets.only(top: 5,bottom: 80),
+            padding: const EdgeInsets.only(top: 15,bottom: 80),
             itemCount: data == null ? 0 : data.length,
             itemBuilder: (context, i) {
               return Column(
@@ -172,16 +174,70 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
                                       style: TextStyle(
                                           fontFamily:
                                           'VarelaRound',
-                                      color: Colors.black)),
+                                          color: Colors.black)),
+                                ),
+                                Padding(
+                                    padding:
+                                    const EdgeInsets.all(
+                                        2.0)
+                                ),
+                                Align(
+                                  alignment:
+                                  Alignment.bottomLeft,
+                                  child: Text(
+                                      data[i]["m"]+ " Konsultasi",
+                                      style: TextStyle(
+                                          fontFamily:
+                                          'VarelaRound',
+                                          fontSize: 12,
+                                          color: Colors.black)),
                                 )
                               ]
                           ),
                           trailing:
-                          data[i]["m"] == "VIDEO" ?
-                              FaIcon(FontAwesomeIcons.video,size: 18,)
-                              :
-                              FaIcon(FontAwesomeIcons.comment)
-                            
+                              data[i]["d"] == 'DECLINE' ?
+                              Container(
+                                height: 30,
+                                child: RaisedButton(
+                                  elevation: 0,
+                                  color: HexColor("#ef6352"),
+                                  child: Text("Batal",
+                                      style: TextStyle(
+                                          fontFamily: 'VarelaRound',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: HexColor("#ffffff")
+                                      )),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: ()async {
+                                  },
+                                ),
+                              )
+                                  : data[i]["d"] == "DONE" ?
+                              Container(
+                                height: 30,
+                                child: RaisedButton(
+                                  elevation: 0,
+                                  color: HexColor("#00b24e"),
+                                  child: Text("Selesai",
+                                      style: TextStyle(
+                                          fontFamily: 'VarelaRound',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: HexColor("#ffffff")
+                                      )),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: ()async {
+                                  },
+                                ),
+                              )
+                                  :
+                                  Container()
+
                       )
 
 
@@ -205,6 +261,4 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
       },
     );
   }
-
-
 }

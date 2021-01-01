@@ -9,6 +9,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
 import 'package:mico_app/mico_appointment.dart';
+import 'package:mico_app/mico_history.dart';
 import 'package:mico_app/mico_index.dart';
 import 'package:mico_app/mico_login.dart';
 import 'package:mico_app/mico_doktor.dart';
@@ -102,7 +103,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   children: <Widget>[
                     DoktorList(),
                     Appointment(),
-                    Login()
+                    History()
                     //ChatHistory(getPhoneState),
                     //VideoHistory(getPhoneState)
                   ],

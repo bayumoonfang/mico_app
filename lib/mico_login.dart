@@ -43,8 +43,7 @@ class _LoginState extends State<Login> {
       showToast("Telpon tidak boleh kosong", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
-    final response = await http.post(
-        "https://duakata-dev.com/miracle/api_script.php?do=act_gettoken",
+    final response = await http.post("https://mobile.miracle-clinic.com/api_script.php?do=act_gettoken",
         body: {"phone": _phonecontrol.text.toString(), "email": _emailcontroller.text.toString()});
     Map showdata = jsonDecode(response.body);
     setState(() {
