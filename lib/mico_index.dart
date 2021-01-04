@@ -25,7 +25,7 @@ class _IndexState extends State<Index> {
     Size size = MediaQuery.of(context).size;
     return Container(
       color: Colors.white,
-      height: size.height,
+      height: double.infinity,
       width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
