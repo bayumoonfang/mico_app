@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
 import 'package:mico_app/mico_index.dart';
 import 'package:mico_app/services/mico_cekroomchat.dart';
 import 'package:mico_app/services/mico_cekroomvideo.dart';
+
+
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -46,7 +49,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
 
   Future<List> getData() async {
     http.Response response = await http.get(
-        Uri.encodeFull("https://mobile.miracle-clinic.com/api_script.php?do=getdata_dokter"),
+        Uri.encodeFull(applink+"api_script.php?do=getdata_dokter"),
         headers: {"Accept":"application/json"}
     );
     setState((){
@@ -57,7 +60,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
   String cekApp = "";
   _getCountApp() async {
     final response = await http.get(
-        "https://mobile.miracle-clinic.com/api_script.php?do=getdata_cekapp&id="+getPhone.toString());
+        applink+"api_script.php?do=getdata_cekapp&id="+getPhone.toString());
     Map data = jsonDecode(response.body);
     setState(() {
         cekApp = data["a"].toString();
@@ -67,7 +70,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
 
   Future<List> getDataRecent() async {
     http.Response response = await http.get(
-        Uri.encodeFull("https://mobile.miracle-clinic.com/api_script.php?do=getdata_recentdokter&id="+getPhone.toString()),
+        Uri.encodeFull(applink+"api_script.php?do=getdata_recentdokter&id="+getPhone.toString()),
         headers: {"Accept":"application/json"}
     );
     setState((){
@@ -86,7 +89,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
 
 
   void _addfavorite(String iddokter) {
-    var url = "https://mobile.miracle-clinic.com/api_script.php?do=action_addfavorite";
+    var url = applink+"api_script.php?do=action_addfavorite";
     http.post(url,
         body: {
           "iduser": getPhone,
@@ -97,7 +100,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
   }
 
   void _deletefavorite(String iddokter) {
-    var url = "https://mobile.miracle-clinic.com/api_script.php?do=action_deletefavorite";
+    var url = applink+"api_script.php?do=action_deletefavorite";
     http.post(url,
         body: {
           "iduser": getPhone,
@@ -117,7 +120,6 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     super.initState();
-
     _loadData();
     //getData();
   }
@@ -219,7 +221,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
                               data2[i]["e"] == '' ? AssetImage(
                                   "assets/mira-ico.png") :
                               CachedNetworkImageProvider(
-                                "https://mobile.miracle-clinic.com/media/photo/" +
+                                applink+"media/photo/" +
                                     data2[i]["e"],
                               ),
                               backgroundColor: Colors.white,
@@ -289,7 +291,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
                                     CircleAvatar(
                                       backgroundImage:
                                       data[i]["e"] == '' ? AssetImage("assets/mira-ico.png") :
-                                      CachedNetworkImageProvider("https://mobile.miracle-clinic.com/media/photo/"+data[i]["e"],
+                                      CachedNetworkImageProvider(applink+"media/photo/"+data[i]["e"],
                                       ),
                                       backgroundColor: Colors.white,
                                       radius: 28,
@@ -352,7 +354,7 @@ class _DoktorListState extends State<DoktorList> with AutomaticKeepAliveClientMi
                                   CircleAvatar(
                                     backgroundImage:
                                     data[i]["e"] == '' ? AssetImage("assets/mira-ico.png") :
-                                    CachedNetworkImageProvider("https://mobile.miracle-clinic.com/media/photo/"+data[i]["e"],
+                                    CachedNetworkImageProvider(applink+"media/photo/"+data[i]["e"],
                                     ),
                                     backgroundColor: Colors.white,
                                     radius: 28,

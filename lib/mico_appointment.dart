@@ -6,8 +6,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
+import 'package:mico_app/mico_detailappointment.dart';
 import 'package:mico_app/mico_index.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +45,7 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
 
   Future<List> getData() async {
     http.Response response = await http.get(
-        Uri.encodeFull("https://mobile.miracle-clinic.com/api_script.php?do=getdata_recentdokter2&id="+getPhone.toString()),
+        Uri.encodeFull(applink+"api_script.php?do=getdata_recentdokter2&id="+getPhone.toString()),
         headers: {"Accept":"application/json"}
     );
     setState((){
@@ -127,12 +129,7 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
                 children: <Widget>[
                   InkWell(
                       onTap: () {
-                        /* Navigator.of(context).push(
-                                new MaterialPageRoute(
-                                    builder: (BuildContext context) => Pembayaran(
-                                        data[i]["f"],
-                                        widget.namaklinik,
-                                        data[i]["b"])));*/
+                        Navigator.push(context, ExitPage(page: DetailAppointment(idAppointment: data[i]["o"])));
                       },
                       child:
                       ListTile(
@@ -140,7 +137,7 @@ class _AppointmentState extends State<Appointment> with SingleTickerProviderStat
                           CircleAvatar(
                             backgroundImage:
                             data[i]["e"] == '' ? AssetImage("assets/mira-ico.png") :
-                            CachedNetworkImageProvider("https://mobile.miracle-clinic.com/media/photo/"+data[i]["e"],
+                            CachedNetworkImageProvider(applink+"media/photo/"+data[i]["e"],
                             ),
                             backgroundColor: Colors.white,
                             radius: 28,

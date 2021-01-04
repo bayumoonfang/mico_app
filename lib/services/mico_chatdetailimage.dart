@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:photo_view/photo_view.dart';
 
 class DetailChatImage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _DetailChatImageState extends State<DetailChatImage> {
               tag: 'imagehero',
               child:
               PhotoView(
-                imageProvider: NetworkImage("https://mobile.miracle-clinic.com/media/imgchat/"+widget.ImgFile),
+                imageProvider: NetworkImage(applink+"media/imgchat/"+widget.ImgFile),
               )
             /* Image (
                     image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+widget.ImgFile),

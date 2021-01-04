@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/mico_login.dart';
 import 'package:mico_app/mico_home.dart';
@@ -42,7 +43,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       showToast("Token harus 6 angka", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
-    final response = await http.post("https://mobile.miracle-clinic.com/api_script.php?do=act_ceklogin",
+    final response = await http.post(applink+"api_script.php?do=act_ceklogin",
         body: {"phone": getPhone, "email": getEmail, "token": _tokenVal.text});
     Map data = jsonDecode(response.body);
     setState(() {

@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -51,7 +52,7 @@ class _ChatRoomState extends State<ChatRoom> {
   String getAppKode = "0";
   _getChatDetail() async {
     final response = await http.get(
-        "https://mobile.miracle-clinic.com/api_script.php?do=getdata_chatdetailnew&id="+getPhone.toString());
+        applink+"api_script.php?do=getdata_chatdetailnew&id="+getPhone.toString());
     Map dataq = jsonDecode(response.body);
     setState(() {
       getNamaDokter = dataq["b"].toString();
@@ -102,7 +103,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Future<List> getDataChat2() async {
     final response = await http.get(
-        "https://mobile.miracle-clinic.com/api_script.php?do=getdata_chatnew&"
+        applink+"api_script.php?do=getdata_chatnew&"
             "id="+getAppKode.toString());
     setState((){
       data = json.decode(response.body);
@@ -112,7 +113,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Future<List> getDataChat3() async {
     final response = await http.get(
-        "https://mobile.miracle-clinic.com/api_script.php?do=getdata_countchatfixed&"
+        applink+"api_script.php?do=getdata_countchatfixed&"
             "id="+getAppKode);
     setState((){
       data2 = json.decode(response.body);
@@ -120,7 +121,7 @@ class _ChatRoomState extends State<ChatRoom> {
     });
   }
   void _removeread() async {
-    var url = "https://mobile.miracle-clinic.com/api_script.php?do=action_removeread";
+    var url = applink+"api_script.php?do=action_removeread";
     http.post(url,
         body: {
           "id": getAppKode,
@@ -132,7 +133,7 @@ class _ChatRoomState extends State<ChatRoom> {
     if(_textController.text.isEmpty) {
       return;
     } else {
-      var url = "https://mobile.miracle-clinic.com/api_script.php?do=addata_chatnew";
+      var url = applink+"api_script.php?do=addata_chatnew";
       http.post(url,
           body: {
             "messagetext": _textController.text,
@@ -152,7 +153,7 @@ class _ChatRoomState extends State<ChatRoom> {
     );
     String fileName = galleryFile.path.split('/').last;
     Base64 = base64Encode((galleryFile.readAsBytesSync()));
-    http.post("https://mobile.miracle-clinic.com/api_script.php?do=addata_chatimage2", body: {
+    http.post(applink+"api_script.php?do=addata_chatimage2", body: {
       "image": Base64,
       "name": fileName,
       "id": getAppKode
@@ -199,7 +200,7 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   void _dodeletepesan(String valID) {
-    var url = "https://mobile.miracle-clinic.com/api_script.php?do=action_deletechatuser";
+    var url = applink+"api_script.php?do=action_deletechatuser";
     http.post(url,
         body: {
           "idmessage": valID
@@ -208,7 +209,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
 
   void _dodeletepesanimage(String valID) {
-    var url = "https://mobile.miracle-clinic.com/api_script.php?do=action_deletechatimageuser";
+    var url = applink+"api_script.php?do=action_deletechatimageuser";
     http.post(url,
         body: {
           "idmessage": valID
@@ -356,7 +357,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                                                  tag: data[i]["h"],
                                                                  child :
                                                                  Image(
-                                                                   image: NetworkImage("https://mobile.miracle-clinic.com/media/imgchat/"+ data[i]["h"]),
+                                                                   image: NetworkImage(applink+"media/imgchat/"+ data[i]["h"]),
                                                                    height: 160,
                                                                    width: 160,
                                                                  )),
@@ -445,7 +446,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                                                        tag: data[i]["h"],
                                                                        child :
                                                                        Image(
-                                                                         image: NetworkImage("https://mobile.miracle-clinic.com/media/imgchat/"+ data[i]["h"]),
+                                                                         image: NetworkImage(applink+"media/imgchat/"+ data[i]["h"]),
                                                                          height: 160,
                                                                          width: 160,
                                                                        )),

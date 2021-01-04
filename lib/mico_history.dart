@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
 import 'package:mico_app/mico_index.dart';
@@ -45,7 +46,7 @@ class _HistoryState extends State<History> with AutomaticKeepAliveClientMixin<Hi
 
   Future<List> getData() async {
     http.Response response = await http.get(
-        Uri.encodeFull("https://mobile.miracle-clinic.com/api_script.php?do=getdata_recentdokter3&id="+getPhone.toString()),
+        Uri.encodeFull(applink+"api_script.php?do=getdata_recentdokter3&id="+getPhone.toString()),
         headers: {"Accept":"application/json"}
     );
     setState((){

@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mico_app/helper/link_api.dart';
 import 'package:mico_app/helper/page_route.dart';
 import 'package:mico_app/helper/session.dart';
 import 'package:mico_app/mico_home.dart';
@@ -39,7 +40,7 @@ class _CekRoomChatState extends State<CekRoomChat> {
   String cekApp = "";
   _getCekApp() async {
     final response = await http.get(
-        "https://mobile.miracle-clinic.com/api_script.php?do=getdata_cekapp&id="+getPhone.toString());
+        applink+"api_script.php?do=getdata_cekapp&id="+getPhone.toString());
     Map data = jsonDecode(response.body);
     setState(() {
       cekApp = data["a"].toString();
